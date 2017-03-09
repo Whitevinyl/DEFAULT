@@ -1,14 +1,10 @@
-/**
- * Created by luketwyman on 03/11/2014.
- */
-
 
 
 // INIT //
-var canvas;
-var cxa;
-var scene = 0;
+var canvas = [];
+var ctx = [];
 var TWEEN;
+var fonts;
 
 
 // METRICS //
@@ -26,6 +22,8 @@ var bodyType = 0;
 var subType = 0;
 var device = "desktop";
 
+var TAU = 2 * Math.PI;
+
 
 // INTERACTION //
 var mouseX = 0;
@@ -35,11 +33,11 @@ var touch;
 var mouseIsDown = false;
 
 
+
+
 // COLORS //
-var bgCols = [new RGBA(0,79,66,1),new RGBA(255,236,88,1)];
-var masterCol = new RGBA(0,0,0,0);
-var highPass = new RGBA(0,0,0,0);
-var lowPass = new RGBA(0,0,0,0);
+var bgCols = [new RGBA(5,5,5,1),new RGBA(255,236,88,1)];
+var textCol = new RGBA(255,255,255,1);
 
 
 
@@ -50,86 +48,57 @@ var lowPass = new RGBA(0,0,0,0);
 
 function init() {
 
-    ////////////// SETUP CANVAS ////////////
+    // SETUP CANVAS //
+    var cnvs = document.getElementById("main");
+    var cntx = cnvs.getContext("2d");
+    cntx.mozImageSmoothingEnabled = false;
+    cntx.imageSmoothingEnabled = false;
 
-    canvas = document.getElementById("cnvs");
-    var target = canvas;
+    canvas.push(cnvs);
+    ctx.push(cntx);
 
-    // MOUSE //
-    target.addEventListener("mousedown", mousePress, false);
-    target.addEventListener("mouseup", mouseRelease, false);
-    target.addEventListener("mousemove", mouseMove, false);
 
-    // TOUCH //
-    target.addEventListener('touchstart', function(event) {
-        if (event.targetTouches.length == 1) {
-            touch = event.targetTouches[0];
-            touchTakeover = true;
-        } else {
-            touchTakeover = false;
-        }
-        clickOrTouch();
-    }, false);
-    target.addEventListener('touchmove', function(event) {
-        event.preventDefault();
-        if (event.targetTouches.length == 1) {
-            touch = event.targetTouches[0];
-        }
-        mouseMove(event);
-    }, false);
-    target.addEventListener('touchend', function(event) {
-        mouseRelease();
-        touchTakeover = false;
-    }, false);
-
-    cxa = canvas.getContext("2d");
-    cxa.mozImageSmoothingEnabled = false;
-    cxa.imageSmoothingEnabled = false;
+    StartAudioContext(Tone.context, '#main').then(function(){
+        //started
+    });
 
     // SET CANVAS & DRAWING POSITIONS //
     metrics();
 
+    // INITIALISE THINGS //
+    setupInteraction(canvas[0]);
+    setupAudio();
+
+
+
     // DONE //
-    scene = 1;
-    draw();
-
-    setTimeout( function() {
-        colourTo(bgCols[1],242,48,95,1,1.5);
-    },2000);
-
-
-
-} // END INIT
-
-
-
-
+    fonts = new Fonts(['Bodoni:n4,o4'],2,function(){
+        setupDrawing();
+        draw();
+    });
+    fonts.setup();
+}
 
 
 
 
 //-------------------------------------------------------------------------------------------
-//  LOOP
+//  MAIN LOOP
 //-------------------------------------------------------------------------------------------
-
-
 
 
 function draw() {
-    if (scene==1) {
-        update();
-        drawBG();
-        drawScene();
-    }
+    update();
+    drawBG();
+    drawScene();
 
-    requestAnimationFrame(draw,canvas);
+    requestAnimationFrame(draw);
 }
 
 
 //-------------------------------------------------------------------------------------------
 //  UPDATE
 //-------------------------------------------------------------------------------------------
-
 
 
 function update() {

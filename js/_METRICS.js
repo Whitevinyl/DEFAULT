@@ -14,10 +14,13 @@ function metrics() {
     const height = window.innerHeight;
     const ratio = getPixelRatio();
 
-    canvas.width  = width * ratio;
-    canvas.height = height * ratio;
-    canvas.style.width = width + "px";
-    canvas.style.height = height + "px";
+
+    for (var i=0; i<canvas.length; i++) {
+        canvas[i].width  = width * ratio;
+        canvas[i].height = height * ratio;
+        canvas[i].style.width = width + "px";
+        canvas[i].style.height = height + "px";
+    }
 
     console.log(width);
     console.log(ratio);
@@ -43,13 +46,13 @@ function metrics() {
     if (device=="mobile") {
 
         u = (width * ratio) * 2.6;
-        units = (u/1200);
+        units = (u/700);
 
         // TEXT SIZES //
-        headerType = Math.round(u/25);
-        midType = Math.round(u/80);
+        headerType = Math.round(u/32);
+        midType = Math.round(u/47);
+        bodyType = Math.round(u/62);
         dataType = Math.round(u/100);
-        bodyType = Math.round(u/100);
         subType = Math.round(u/90);
 
     } else {
@@ -58,12 +61,11 @@ function metrics() {
         units = (u/800);
 
         // TEXT SIZES //
-        headerType = Math.round(u/12);
-        midType = Math.round(u/65);
-        dataType = Math.round(u/82);
-        bodyType = Math.round(u/42);
+        headerType = Math.round(u/22);
+        midType = Math.round(u/35);
+        bodyType = Math.round(u/50);
+        dataType = Math.round(u/85);
         subType = Math.round(u/90);
-
     }
 
 
@@ -74,13 +76,13 @@ function metrics() {
 
 
 function getPixelRatio() {
-    var ctx = cxa;
+    var cntx = ctx[0];
     var dpr = window.devicePixelRatio || 1;
-    var bsr = ctx.webkitBackingStorePixelRatio ||
-        ctx.mozBackingStorePixelRatio ||
-        ctx.msBackingStorePixelRatio ||
-        ctx.oBackingStorePixelRatio ||
-        ctx.backingStorePixelRatio || 1;
+    var bsr = cntx.webkitBackingStorePixelRatio ||
+        cntx.mozBackingStorePixelRatio ||
+        cntx.msBackingStorePixelRatio ||
+        cntx.oBackingStorePixelRatio ||
+        cntx.backingStorePixelRatio || 1;
 
     return dpr / bsr;
 }

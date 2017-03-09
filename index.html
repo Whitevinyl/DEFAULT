@@ -11,20 +11,29 @@
     <meta name="robots" content="noodp,noydir" />
     <meta name="keywords" content=""  />
 
+    <script type="text/javascript" src="js/lib/promise.min.js"></script>
     <script type="text/javascript" src="js/lib/tween.min.js"></script>
     <script type="text/javascript" src="js/lib/Tone.min.js"></script>
-    <!--<script type="text/javascript" src="js/lib/three.min.js"></script>-->
-    <!--<script type="text/javascript" src="js/lib/PixelPalette.js"></script>-->
+    <script type="text/javascript" src="js/lib/tombola.js"></script>
+    <script type="text/javascript" src="js/lib/colorflex.js"></script>
+    <script type="text/javascript" src="js/lib/perlin-simplex.js"></script>
+    <script type="text/javascript" src="js/lib/StartAudioContext.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webfont/1.6.24/webfontloader.js"></script>
 
-    <script type="text/javascript" src="js/_OBJECTS.js"></script>
+    <script type="text/javascript" src="js/_UTILS.js"></script>
+
+
     <script type="text/javascript" src="js/_MAIN.js"></script>
     <script type="text/javascript" src="js/_METRICS.js"></script>
+    <script type="text/javascript" src="js/_AUDIO.js"></script>
     <script type="text/javascript" src="js/_INTERACTION.js"></script>
     <script type="text/javascript" src="js/_DRAW.js"></script>
     <script type="text/javascript" src="js/_TWEENS.js"></script>
     <script type="text/javascript" src="js/_FONTS.js"></script>
-    
+
     <link href="STYLE.css" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400" rel="stylesheet">
+    <!--<link href="webfonts/stylesheet.css" rel="stylesheet" type="text/css" >-->
 
 
     <!--<link rel="icon" type="image/png" href="favicon.ico">
@@ -40,7 +49,13 @@
 </head>
 <body oncontextmenu="return false" bgcolor="#000" onload="init()" onresize="metrics()">
 
-    <canvas id="cnvs" class="unselectable"></canvas>
+<div id="app" >
+
+    <canvas id="main" class="unselectable"></canvas>
+
+</div>
+
+
 
 </body>
 </html>

@@ -1,9 +1,49 @@
-/**
- * Created by luketwyman on 25/11/2015.
- */
+
+
 
 //-------------------------------------------------------------------------------------------
-//  INTERACTION
+//  SETUP
+//-------------------------------------------------------------------------------------------
+
+function setupInteraction(target) {
+
+    // MOUSE //
+    target.addEventListener("mousedown", mousePress, false);
+    target.addEventListener("mouseup", mouseRelease, false);
+    target.addEventListener("mousemove", mouseMove, false);
+
+
+    // TOUCH //
+    target.addEventListener('touchstart', function(event) {
+        event.preventDefault();
+        if (event.targetTouches.length == 1) {
+            touch = event.targetTouches[0];
+            touchTakeover = true;
+        } else {
+            touchTakeover = false;
+        }
+        clickOrTouch();
+    }, false);
+    target.addEventListener('touchmove', function(event) {
+        event.preventDefault();
+        if (event.targetTouches.length == 1) {
+            touch = event.targetTouches[0];
+        }
+        mouseMove(event);
+    }, false);
+    target.addEventListener('touchend', function(event) {
+        mouseRelease();
+        touchTakeover = false;
+    }, false);
+
+
+}
+
+
+
+
+//-------------------------------------------------------------------------------------------
+//  MOUSE / TOUCH
 //-------------------------------------------------------------------------------------------
 
 
@@ -13,7 +53,10 @@ function mousePress() {
     mouseIsDown = true;
     rolloverCheck();
 
+
 }
+
+
 
 function mouseRelease() {
     mouseIsDown = false;
@@ -37,17 +80,17 @@ function mouseMove(event) {
     mouseX = x * ratio;
     mouseY = y * ratio;
     rolloverCheck();
+
+
 }
 
 function rolloverCheck() {
-    //playOver = hudCheck(dx - (32*units),dy + (8*units) + (midType*0.9),64*units,64*units);
+    var u = units;
+
+    var test = hudCheck(dx-(30*u), dy+(40*u), 60*u, 60*u);
+
 }
 
-function hudCheck(x,y,w,h) { // IS CURSOR WITHIN GIVEN BOUNDARIES
-    var mx = mouseX;
-    var my = mouseY;
-    return (mx>x && mx<(x+w) && my>y && my<(y+h));
-}
 
 
 // DETERMINE CLICK //
@@ -71,3 +114,7 @@ function clickOrTouch(event) {
         mousePress(event);
     }
 }
+
+
+
+

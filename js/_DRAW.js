@@ -1,6 +1,12 @@
-/**
- * Created by luketwyman on 03/11/2014.
- */
+
+
+
+
+
+function setupDrawing() {
+
+}
+
 
 
 //-------------------------------------------------------------------------------------------
@@ -9,15 +15,10 @@
 
 
 function drawBG() {
-
-    //cxa.globalAlpha = 1;
-
-    setColor(bgCols[0]);
-    cxa.fillRect(0,0,fullX,fullY);
+    ctx[0].globalAlpha = 1;
+    color.fill(ctx[0],bgCols[0]);
+    ctx[0].fillRect(0,0,fullX,fullY);
 }
-
-
-
 
 
 //-------------------------------------------------------------------------------------------
@@ -25,16 +26,18 @@ function drawBG() {
 //-------------------------------------------------------------------------------------------
 
 
-
-
 function drawScene() {
-
-    var size = 20;
-
-    setColor(bgCols[1]);
-    cxa.fillRect(dx - (size * units), dy - (size * units), 2 * (size * units), 2 * (size * units));
+    var u = units;
+    var font = "Open Sans";
+    var ct = ctx[0];
 
 
+    color.fill(ct,textCol);
+    ct.fillRect(dx - (15*u),dy - (15*u),30*u,30*u);
+
+    ct.textAlign = 'center';
+    ct.font = '400 ' + bodyType + 'px ' + font;
+    ct.fillText('Default',dx,dy + (60*u));
 }
 
 
@@ -44,73 +47,48 @@ function drawScene() {
 //-------------------------------------------------------------------------------------------
 
 
-// PASS COLOUR OBJECT //
-function setColor(col) {
 
-    // master color filter //
-    var red = Math.round(col.R + masterCol.R);
-    var green = Math.round(col.G + masterCol.G);
-    var blue = Math.round(col.B + masterCol.B);
-    var alpha = col.A + masterCol.A;
+function spacedText(ctx,string,x,y,spacing) {
 
-    // high & low pass color filters //
-    var av = ((red + green + blue) / 3);
-    var hp = av/255;
-    var lp = 1 - (av/255);
-    red += Math.round((highPass.R*hp) + (lowPass.R*lp));
-    green += Math.round((highPass.G*hp) + (lowPass.G*lp));
-    blue += Math.round((highPass.B*hp) + (lowPass.B*lp));
+    var chars = string.length;
+    var fullWidth = (chars-1) * spacing;
+    var charList = [];
+    var charWidths = [];
+    for (var i=0; i<chars; i++) {
+        var c = string.substr(i, 1);
+        var w = ctx.measureText(c).width;
+        charList.push (c);
+        charWidths.push(w);
+        fullWidth += w;
+    }
 
-    buildColour(red,green,blue,alpha);
+    x -= fullWidth/2;
+
+    for (i=0; i<chars; i++) {
+        ctx.fillText(charList[i], x, y);
+        x += (spacing + charWidths[i]);
+    }
 }
 
 
-// PASS MANUAL R G B A //
-function setRGBA(r,g,b,a) {
-    var red = Math.round(r + masterCol.R);
-    var green = Math.round(g + masterCol.G);
-    var blue = Math.round(b + masterCol.B);
-    var alpha = a + masterCol.A;
-
-    // high & low pass color filters //
-    var av = ((red + green + blue) / 3);
-    var hp = av/255;
-    var lp = 1 - (av/255);
-    red += Math.round((highPass.R*hp) + (lowPass.R*lp));
-    green += Math.round((highPass.G*hp) + (lowPass.G*lp));
-    blue += Math.round((highPass.B*hp) + (lowPass.B*lp));
-
-    buildColour(red,green,blue,alpha);
+function drawPlay(ct,x,y,w,h) {
+    ct.beginPath();
+    ct.moveTo(x - (w/2), y - (h/2));
+    ct.lineTo(x - (w/2), y + (h/2));
+    ct.lineTo(x + (w/2), y);
+    ct.closePath();
+    ct.fill();
 }
 
+function drawPause(ct,x,y,w,h) {
+    ct.fillRect(x - (w*0.45), y - (h/2), w*0.25, h);
+    ct.fillRect(x + (w*0.2), y - (h/2), w*0.25, h);
+}
 
-function buildColour(red,green,blue,alpha) {
-    // RANGE //
-    if (red<0) {
-        red = 0;
-    }
-    if (red>255) {
-        red = 255;
-    }
-    if (green<0) {
-        green = 0;
-    }
-    if (green>255) {
-        green = 255;
-    }
-    if (blue<0) {
-        blue = 0;
-    }
-    if (blue>255) {
-        blue = 255;
-    }
-    if (alpha<0) {
-        alpha = 0;
-    }
-    if (alpha>1) {
-        alpha = 1;
-    }
-    cxa.fillStyle = cxa.strokeStyle = "rgba("+red+","+green+","+blue+","+alpha+")";
+function drawHamburger(ct,x,y,w,h,t) {
+    ct.fillRect(x - (w/2), y - (h/2), w, t);
+    ct.fillRect(x - (w/2), y - (t/2), w, t);
+    ct.fillRect(x - (w/2), y + (h/2) - t, w, t);
 }
 
 
